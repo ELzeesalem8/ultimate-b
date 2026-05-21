@@ -1,4 +1,4 @@
-const { sendWhatsApp } = require('../whatsappService');
+const { sendWhatsApp } = require('../services/whatsappService');
 const db = require('../database');
 const { Groq } = require('groq-sdk');
 const groq = new Groq({ apiKey: process.env.GROQ_API_KEY });
@@ -461,19 +461,20 @@ function generateComplaintId() {
 // ────────────────────────────────────────────────────────────
 // 6. EXPORTS
 // ────────────────────────────────────────────────────────────
-
 module.exports = {
+  handleWhatsAppMessage, 
+  handleIntent,
   SYSTEM_PROMPT,
   PRICE_TABLE,
   PRODUCTS,
   MESSAGES,
   calculatePrice,
-  handleIntent,
   generateOrderId,
   generateComplaintId,
   LARGE_ORDER_THRESHOLD,
-  DELIVERY_DAYS,
+  DELIVERY_DAYS
 };
+
 // This function connects your 481-line logic to the outside world
 async function handleWhatsAppMessage(number, text) {
     try {
