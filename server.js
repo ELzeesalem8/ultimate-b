@@ -1,9 +1,8 @@
-require('dotenv').config();
+ require('dotenv').config();
 const express = require('express');
 const cron = require('node-cron');
-const { handleIntent, MESSAGES } = require('./scripts/bot');
+const { handleWhatsAppMessage, MESSAGES } = require('./scripts/bot'); // 1. Changed to pull the main wrapper
 const db = require('./database');
-// const whatsapp = require('./whatsappService'); // We will configure this next
 
 const app = express();
 app.use(express.json());
@@ -29,7 +28,11 @@ app.post('/webhook', async (req, res) => {
 
             console.log(`[Ultimate B] Private message from ${remoteJid}: ${messageText}`);
 
-            // Logic for processing message with Groq/handleIntent will go here
+            // 2. Added slowly right here:
+            const cleanNumber = remoteJid.split('@')[0];
+            
+            // This runs the Groq AI brain and immediately hits your Gulf Arabic style templates
+            await handleWhatsAppMessage(cleanNumber, messageText); 
         }
 
         res.sendStatus(200);
@@ -61,7 +64,7 @@ cron.schedule('0 21 * * *', async () => {
             newOrders: result.rows[0].orders || 0,
             priceInquiries: result.rows[0].prices || 0,
             totalMessages: result.rows[0].total || 0,
-            estimatedRevenue: 0 // We can calculate this as we build more
+            estimatedRevenue: 0 
         };
 
         // Matching the tone of your bot.js templates
@@ -69,8 +72,6 @@ cron.schedule('0 21 * * *', async () => {
         
         const fatherNumber = process.env.MANAGER_NUMBER; 
         console.log(`[Report] Sending to ${fatherNumber}:\n${reportMessage}`);
-        
-        // await whatsapp.sendText(fatherNumber, reportMessage);
 
     } catch (error) {
         console.error("Failed to generate daily report:", error);
@@ -85,4 +86,5 @@ app.listen(PORT, () => {
     console.log(`🚀 Ultimate B is live on port ${PORT}`);
     console.log(`🛡️  Group Chat Shield: ACTIVE`);
     console.log(`📊 Daily Reports: SCHEDULED (21:00)`);
+    console.log(`✅ Connected to Neon PostgreSQL`);
 });
