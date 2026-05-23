@@ -1,4 +1,4 @@
-const { sendWhatsApp } = require('../services/whatsappService');
+const { sendWhatsApp } = require('../whatsappService');
 const db = require('../database');
 const { Groq } = require('groq-sdk');
 const groq = new Groq({ apiKey: process.env.GROQ_API_KEY });
