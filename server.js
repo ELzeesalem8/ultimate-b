@@ -1,4 +1,5 @@
- require('dotenv').config();
+console.log("DEBUG: WhatsApp API Key is:", process.env.WHATSAPP_API_KEY ? "SET" : "MISSING");
+require('dotenv').config();
 const express = require('express');
 const cron = require('node-cron');
 const { handleWhatsAppMessage, MESSAGES } = require('./scripts/bot'); // 1. Changed to pull the main wrapper
