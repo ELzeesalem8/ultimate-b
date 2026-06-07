@@ -481,7 +481,7 @@ async function handleWhatsAppMessage(number, text) {
         // 1. Let the AI analyze the intent (using your SYSTEM_PROMPT)
         const completion = await groq.chat.completions.create({
             messages: [{ role: "system", content: SYSTEM_PROMPT }, { role: "user", content: text }],
-            model:"llama-3.3-70b-specdec",
+            model: "llama-3.3-70b-versatile",
             response_format: { type: "json_object" }
         });
 
